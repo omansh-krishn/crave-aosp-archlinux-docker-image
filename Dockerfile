@@ -1,9 +1,9 @@
 # Heavily based on https://github.dev/accupara/docker-images/tree/master/baseimages/phase1/ubuntu/22.04
 FROM archlinux:latest
-COPY sshd_config /tmp/
+COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
-  && pacman -Syu base-devel bash-completion binutils cmake extra-cmake-modules cargo curl emacs ffmpeg git git-lfs guile jq meson ninja popt python xxhash github-cli gradle lsb-release lsb-release ninja openssh openssl pacman-contrib psmisc remake repo rsync subversion sudo tmux vim neovim wget --noconfirm \
+  && pacman -Syu base-devel binutils cmake cargo curl emacs extra-cmake-modules ffmpeg git git-lfs github-cli gradle guile jq less lsb-release meson ninja openssh openssl popt python pacman-contrib psmisc remake repo rsync subversion sudo tmux tree vim neovim wget xxhash zsh --noconfirm \
   && pacman -Sc --noconfirm \
   && /usr/bin/ssh-keygen -A \
   && mkdir -p /etc/crave \
@@ -11,7 +11,7 @@ RUN set -x && \
   && chmod +x /etc/crave/create_build_tools_json.sh \
   && curl -s https://raw.githubusercontent.com/accupara/crave/master/get_crave.sh | bash -s -- \
   && mv crave /usr/local/bin/ \
-  && useradd -ms /bin/bash admin \
+  && useradd -ms /usr/bin/zsh admin \
   && echo "admin:admin" | chpasswd \
   && usermod -aG wheel admin \
   && echo "admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
@@ -23,11 +23,9 @@ ENV HOME=/home/admin \
     TERM=xterm \
     LANG=en_US.utf8
 WORKDIR /home/admin
-CMD /bin/bash
+CMD /usr/bin/zsh
 RUN set -x \
   && sudo chown -R admin:admin /home/admin \
-  && echo ". /usr/share/bash-completion/bash_completion" >> /home/admin/.bashrc \
-  && echo "alias ls='ls --color' ; alias ll='ls -l'" >> /home/admin/.bashrc \
   && mkdir /home/admin/.ssh \
   && chmod 700 /home/admin/.ssh \
   && touch /home/admin/.ssh/authorized_keys \
@@ -48,11 +46,24 @@ RUN set -x \
   && sudo pacman -U ./*zst --noconfirm && rm *zst \
   && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm && cd .. && rm -rf paru \
   && paru -S multilib-devel aosp-devel lineageos-devel --noconfirm
+RUN paru -S lunarvim-git --noconfirm 
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
+  && $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install \
+  && git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting \
+  && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+  && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search \
+  && rm -rf $HOME/.cache/paru
 
+COPY assets/config.lua /home/admin/.config/lvim/
+COPY assets/zshrc /home/admin/.zshrc
+COPY assets/p10k.zsh /home/admin/.p10k.zsh
+
+RUN /usr/share/lunarvim/init-lvim.sh
 RUN sudo chmod 777 /etc/mke2fs.conf
 
-COPY telegram /usr/bin/
-COPY upload /usr/bin/
+COPY assets/telegram /usr/bin/
+COPY assets/upload /usr/bin/
 
 ENV REPO_NO_INTERACTIVE=1 \
     GIT_TERMINAL_PROMPT=0
