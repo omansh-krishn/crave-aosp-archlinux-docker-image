@@ -1,5 +1,5 @@
 # Heavily based on https://github.dev/accupara/docker-images/tree/master/baseimages/phase1/ubuntu/22.04
-FROM archlinux/archlinux:latest
+FROM archlinux/archlinux:multilib-devel
 COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
@@ -40,20 +40,17 @@ RUN set -x \
   && git config --global user.name 'Omansh Krishn' \
   && git config --global user.email 'omansh11597@gmail.com' \
   && git config --global color.ui true \
-  && echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf \
-  && sudo pacman -Syy \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
   && sudo pacman -U ./*zst --noconfirm && rm *zst \
   && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm && cd .. && rm -rf paru \
-  && paru -S multilib-devel aosp-devel lineageos-devel --noconfirm
+  && paru -S aosp-devel lineageos-devel --noconfirm
 RUN paru -S lunarvim-git --noconfirm 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
   && $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install \
   && git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting \
   && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
-  && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search \
-  && rm -rf $HOME/.cache/paru
+  && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 
 COPY assets/config.lua /home/admin/.config/lvim/
 COPY assets/zshrc /home/admin/.zshrc
@@ -61,6 +58,7 @@ COPY assets/p10k.zsh /home/admin/.p10k.zsh
 
 RUN /usr/share/lunarvim/init-lvim.sh
 RUN sudo chmod 777 /etc/mke2fs.conf
+RUN sudo rm -rf $HOME/.cache/paru $HOME/.cargo /var/cache/pacman/
 
 COPY assets/telegram /usr/bin/
 COPY assets/upload /usr/bin/
