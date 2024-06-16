@@ -1,5 +1,5 @@
 # Heavily based on https://github.dev/accupara/docker-images/tree/master/baseimages/phase1/ubuntu/22.04
-FROM archlinux:latest
+FROM archlinux/archlinux:latest
 COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
