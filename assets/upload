@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STORE=$(curl -s https://api.gofile.io/getServer | jq -r '.data.server')
+STORE=$(curl -s https://api.gofile.io/servers | jq -r '.data.servers[0].name')
 APIKEY=$GOFILEIOAPIKEY
 normalup() {
   MESSAGE=$(curl -F file=@"$1" https://${STORE}.gofile.io/uploadFile | jq)

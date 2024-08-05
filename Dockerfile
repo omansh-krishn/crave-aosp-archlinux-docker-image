@@ -44,7 +44,6 @@ RUN set -x \
   && sudo pacman -U ./*zst --noconfirm && rm *zst \
   && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm && cd .. && rm -rf paru \
   && paru -S aosp-devel lineageos-devel --noconfirm
-RUN paru -S lunarvim-git --noconfirm 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
   && $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install \
@@ -52,11 +51,9 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
   && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
   && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 
-COPY assets/config.lua /home/admin/.config/lvim/
 COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
 
-RUN /usr/share/lunarvim/init-lvim.sh
 RUN sudo chmod 777 /etc/mke2fs.conf
 RUN sudo rm -rf $HOME/.cache/paru $HOME/.cargo /var/cache/pacman/
 
