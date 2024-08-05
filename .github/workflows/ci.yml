@@ -5,7 +5,8 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 */14 * *'
+    - cron: '0 0 1,16 * *'
+  workflow_dispatch:
 
 jobs:
   build-and-push:
