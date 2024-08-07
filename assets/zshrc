@@ -217,3 +217,7 @@ function paste() {
 alias croot='cd /tmp/src/android'
 alias repo-sync='repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)'
 alias lfs="repo forall -c 'git lfs install && git lfs pull && git lfs checkout'"
+
+# CRAVE INSERTED ENV BEGIN: DO NOT REMOVE OR EDIT
+source /tmp/crave_bashrc
+# CRAVE INSERTED ENV END
