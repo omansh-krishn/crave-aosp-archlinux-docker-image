@@ -40,6 +40,7 @@ RUN set -x \
   && git config --global user.name 'Omansh Krishn' \
   && git config --global user.email 'omansh11597@gmail.com' \
   && git config --global color.ui true \
+  && git config --global core.editor "vim" \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
   && sudo pacman -U ./*zst --noconfirm && rm *zst \
   && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm && cd .. && rm -rf paru \
