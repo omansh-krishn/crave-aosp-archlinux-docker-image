@@ -38,7 +38,7 @@ RUN set -x \
   && sudo mkdir -p /opt/aosp \
   && sudo chown admin:admin /opt/aosp \
   && git config --global user.name 'Omansh Krishn' \
-  && git config --global user.email 'omansh11597@gmail.com' \
+  && git config --global user.email 'omansh@duck.com' \
   && git config --global color.ui true \
   && git config --global core.editor "vim" \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
