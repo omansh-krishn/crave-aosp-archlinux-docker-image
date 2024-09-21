@@ -3,7 +3,7 @@ FROM archlinux/archlinux:multilib-devel
 COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
-  && pacman -Syu base-devel binutils cmake cargo curl emacs extra-cmake-modules ffmpeg git git-lfs github-cli gradle guile jq less lsb-release meson ninja openssh openssl popt python pacman-contrib psmisc remake repo rsync subversion sudo tmux tree vim neovim wget xxhash zsh --noconfirm \
+  && pacman -Syu base-devel binutils cmake cargo curl croc emacs extra-cmake-modules ffmpeg git git-lfs github-cli gnu-netcat gradle guile jq less lsb-release meson ninja openssh openssl popt python pacman-contrib psmisc remake repo rsync subversion sudo tmux tree vim neovim wget xxhash zsh --noconfirm \
   && pacman -Sc --noconfirm \
   && /usr/bin/ssh-keygen -A \
   && mkdir -p /etc/crave \
@@ -17,6 +17,8 @@ RUN set -x && \
   && echo "admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
   && mkdir -p /var/run/sshd \
   && mv /tmp/sshd_config /etc/ssh/sshd_config 
+RUN ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime \
+  && echo "Asia/Kolkata" > /etc/timezone
 USER admin
 ENV HOME=/home/admin \
     USER=admin \
