@@ -3,7 +3,7 @@ FROM archlinux/archlinux:multilib-devel
 COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
-  && pacman -Syu base-devel binutils cmake cargo curl croc emacs extra-cmake-modules ffmpeg git git-lfs github-cli gnu-netcat gradle guile jq less lsb-release meson ninja openssh openssl popt python pacman-contrib psmisc remake repo rsync subversion sudo tmux tree vim neovim wget xxhash zsh --noconfirm \
+  && pacman -Syu base-devel binutils byobu cmake cargo curl croc emacs extra-cmake-modules ffmpeg git git-lfs github-cli gnu-netcat gradle guile jq less lsb-release meson ninja openssh openssl popt python pacman-contrib psmisc remake repo rsync subversion sudo tmux tree vim neovim wget xxhash zsh --noconfirm \
   && pacman -Sc --noconfirm \
   && /usr/bin/ssh-keygen -A \
   && mkdir -p /etc/crave \
@@ -53,6 +53,7 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
   && git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting \
   && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
   && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+RUN byobu-enable
 
 COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
