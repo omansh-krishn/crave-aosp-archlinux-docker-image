@@ -54,6 +54,10 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
   && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
   && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 RUN byobu-enable && touch /home/admin/.config/byobu/.welcome-displayed
+RUN sudo mkdir -p /opt/crave/ \
+ && sudo chown admin:admin /opt/crave/ \
+ && wget -q https://raw.githubusercontent.com/accupara/docker-images/master/aosp/common/resync.sh -O /opt/crave/resync.sh \
+ && chmod +x /opt/crave/resync.sh
 
 COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
