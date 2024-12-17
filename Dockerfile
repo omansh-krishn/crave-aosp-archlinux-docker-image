@@ -61,6 +61,7 @@ COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
 
 RUN sudo chmod 777 /etc/mke2fs.conf
+RUN sudo sed -i 's/^#DisableSandbox/DisableSandbox/' /etc/pacman.conf
 RUN sudo rm -rf $HOME/.cache/paru $HOME/.cargo /var/cache/pacman/pkg/
 
 COPY assets/telegram /usr/bin/
