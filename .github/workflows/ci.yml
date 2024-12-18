@@ -1,0 +1,39 @@
+name: DoomEmacs
+
+on:
+  push:
+    branches:
+      - doom
+  schedule:
+    - cron: '0 0 1,16 * *'
+  workflow_dispatch:
+
+jobs:
+  sync-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: sync doom source
+      run: |
+        sudo apt-get update && sudo apt-get install emacs zstd -y
+        git clone https://github.com/doomemacs/doomemacs.git ~/.config/emacs
+        mv doom ~/.config/
+        TZ="Asia/Kolkata"
+        DATE="$(date)"
+        echo "Synced on: $DATE" > date.txt
+        ~/.config/emacs/bin/doom install --no-env --doomdir ~/.config/doom --emacsdir ~/.config/emacs
+
+    - name: tar it
+      run: tar -I 'zstd -T0 -19' -cf doom.tar.zst ~/.config/doom ~/.config/emacs 
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+          name: 'doomemacs'
+          tag_name: 'doomemacs'
+          token: ${{ secrets.PAT }}
+          files: doom.tar.zst
+          body_path: date.txt
