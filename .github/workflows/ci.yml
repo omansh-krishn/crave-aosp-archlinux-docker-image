@@ -21,13 +21,16 @@ jobs:
         sudo apt-get update && sudo apt-get install emacs zstd -y
         git clone https://github.com/doomemacs/doomemacs.git ~/.config/emacs
         mv doom ~/.config/
-        TZ="Asia/Kolkata"
         DATE="$(date)"
         echo "Synced on: $DATE" > date.txt
         ~/.config/emacs/bin/doom install --no-env --doomdir ~/.config/doom --emacsdir ~/.config/emacs
 
     - name: tar it
-      run: tar -I 'zstd -T0 -19' -cf doom.tar.zst ~/.config/doom ~/.config/emacs 
+      run: |
+        BASE_DIR="$(pwd)"
+        cd ~/.config
+        tar -I 'zstd -T0 -19' -cf doom.tar.zst doom emacs
+        mv doom.tar.zst ${BASE_DIR}/
 
     - name: Release
       uses: softprops/action-gh-release@v2
