@@ -11,6 +11,8 @@ on:
 jobs:
   sync-and-release:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:latest
 
     steps:
     - name: Checkout code
@@ -18,19 +20,20 @@ jobs:
 
     - name: sync doom source
       run: |
-        sudo apt-get update && sudo apt-get install emacs zstd -y
+        echo "BASE_DIR=$(pwd)" >> $GITHUB_ENV
+        pacman-key --init
+        pacman-key --populate archlinux
+        pacman -Sy emacs git tar zstd --noconfirm --quiet
         git clone https://github.com/doomemacs/doomemacs.git ~/.config/emacs
         mv doom ~/.config/
-        DATE="$(date)"
-        echo "Synced on: $DATE" > date.txt
+        echo "Synced on: $(date)" > date.txt
         ~/.config/emacs/bin/doom install --no-env --doomdir ~/.config/doom --emacsdir ~/.config/emacs
 
     - name: tar it
       run: |
-        BASE_DIR="$(pwd)"
         cd ~/.config
         tar -I 'zstd -T0 -19' -cf doom.tar.zst doom emacs
-        mv doom.tar.zst ${BASE_DIR}/
+        mv doom.tar.zst ${{ env.BASE_DIR }}/
 
     - name: Release
       uses: softprops/action-gh-release@v2
@@ -38,5 +41,5 @@ jobs:
           name: 'doomemacs'
           tag_name: 'doomemacs'
           token: ${{ secrets.PAT }}
-          files: doom.tar.zst
-          body_path: date.txt
+          files: ${{ env.BASE_DIR }}/doom.tar.zst
+          body_path: ${{ env.BASE_DIR }}/date.txt
