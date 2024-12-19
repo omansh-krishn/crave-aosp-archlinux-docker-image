@@ -1,0 +1,32 @@
+#!/bin/bash
+
+TAR_URL="https://github.com/omansh-krishn/crave-aosp-archlinux-docker-image/releases/download/doomemacs/doom.tar.zst"
+
+[[ -d ${HOME}/.emacs.d ]] && rm -rf ${HOME}/.emacs.d
+[[ -d ${HOME}/.config/doom ]] && mv ${HOME}/.config/doom ${HOME}/.config/doom.$(date +"%y%m%d-%H%M%S")
+[[ -d ${HOME}/.config/emacs ]] && mv ${HOME}/.config/emacs ${HOME}/.config/emacs.$(date +"%y%m%d-%H%M%S")
+[[ -f ${HOME}/.config/doom.tar.zst ]] && mv ${HOME}/.config/doom.tar.zst ${HOME}/.config/doom.$(date +"%y%m%d-%H%M%S").tar.zst
+
+curl -L -o ${HOME}/.config/doom.tar.zst ${TAR_URL}
+
+echo 'Extracting...'
+tar -I zstd -xf ${HOME}/.config/doom.tar.zst -C ${HOME}/.config
+echo 'Done'
+
+pacman -Q emacs &>/dev/null || {
+  echo 'Emacs is not installed';
+  echo 'Installing Emacs...';
+  sudo pacman -Sy emacs --noconfirm
+}
+
+echo 'Updating Symlinks...'
+find "${HOME}/.config/emacs" -type l | while read -r symlink; do
+  target=$(readlink "$symlink")
+  if [[ "$target" =~ ^/github/home/ ]]; then
+    new_target="${target/\/github\/home/$HOME}"
+    ln -sf "$new_target" "$symlink"
+  fi
+done
+echo "Symlinks updated."
+
+echo 'Running doom sync' && doom sync

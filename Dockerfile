@@ -64,6 +64,7 @@ RUN sudo chmod 777 /etc/mke2fs.conf
 RUN sudo sed -i 's/^#DisableSandbox/DisableSandbox/' /etc/pacman.conf
 RUN sudo rm -rf $HOME/.cache/paru $HOME/.cargo /var/cache/pacman/pkg/
 
+COPY assets/getdoom /usr/bin/
 COPY assets/telegram /usr/bin/
 COPY assets/upload /usr/bin/
 
