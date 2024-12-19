@@ -28,6 +28,7 @@ jobs:
         mv doom ~/.config/
         echo "Synced on: $(date)" > date.txt
         ~/.config/emacs/bin/doom install --no-env --doomdir ~/.config/doom --emacsdir ~/.config/emacs
+        curl https://raw.githubusercontent.com/omansh-krishn/crave-aosp-archlinux-docker-image/refs/heads/main/assets/getdoom > getdoom; chmod +x getdoom
 
     - name: tar it
       run: |
@@ -41,5 +42,7 @@ jobs:
           name: 'doomemacs'
           tag_name: 'doomemacs'
           token: ${{ secrets.PAT }}
-          files: ${{ env.BASE_DIR }}/doom.tar.zst
+          files: |
+            ${{ env.BASE_DIR }}/doom.tar.zst
+            ${{ env.BASE_DIR }}/getdoom
           body_path: ${{ env.BASE_DIR }}/date.txt
