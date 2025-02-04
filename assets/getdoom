@@ -13,7 +13,7 @@ echo 'Extracting...'
 tar -I zstd -xf ${HOME}/.config/doom.tar.zst -C ${HOME}/.config
 echo 'Done'
 
-pacman -Q emacs &>/dev/null || {
+pacman -Q emacs-nativecomp &>/dev/null || {
   echo 'Emacs is not installed';
   echo 'Installing Emacs...';
   sudo pacman -Sy emacs --noconfirm
