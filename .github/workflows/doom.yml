@@ -1,0 +1,52 @@
+name: DoomEmacs
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - 'assets/**'
+      - 'Dockerfile'
+  schedule:
+    - cron: '0 0 1,16 * *'
+  workflow_dispatch:
+
+jobs:
+  sync-and-release:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: sync doom source
+      run: |
+        echo "BASE_DIR=$(pwd)" >> $GITHUB_ENV
+        pacman-key --init
+        pacman-key --populate archlinux
+        pacman -Sy emacs git tar zstd --noconfirm --quiet
+        git clone https://github.com/doomemacs/doomemacs.git ~/.config/emacs
+        mv doom ~/.config/
+        echo "Synced on: $(date)" > date.txt
+        ~/.config/emacs/bin/doom install --no-env --doomdir ~/.config/doom --emacsdir ~/.config/emacs
+        curl https://raw.githubusercontent.com/omansh-krishn/crave-aosp-archlinux-docker-image/refs/heads/main/assets/getdoom > getdoom; chmod +x getdoom
+
+    - name: tar it
+      run: |
+        cd ~/.config
+        tar -I 'zstd -T0 --ultra -22' -cf doom.tar.zst doom emacs
+        mv doom.tar.zst ${{ env.BASE_DIR }}/
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+          name: 'doomemacs'
+          tag_name: 'doomemacs'
+          token: ${{ secrets.PAT }}
+          files: |
+            ${{ env.BASE_DIR }}/doom.tar.zst
+            ${{ env.BASE_DIR }}/getdoom
+          body_path: ${{ env.BASE_DIR }}/date.txt

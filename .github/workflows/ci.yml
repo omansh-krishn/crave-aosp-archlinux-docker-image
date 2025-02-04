@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/doom.yml'
+      - 'doom/**'
   schedule:
     - cron: '0 0 1,16 * *'
   workflow_dispatch:
