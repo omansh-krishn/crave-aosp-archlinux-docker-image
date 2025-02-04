@@ -9,7 +9,7 @@ on:
       - 'assets/**'
       - 'Dockerfile'
   schedule:
-    - cron: '0 0 1,16 * *'
+    - cron: '0 0 1 * *'
   workflow_dispatch:
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
     - name: tar it
       run: |
         cd ~/.config
-        tar -I 'zstd -T0 --ultra -22' -cf doom.tar.zst doom emacs
+        tar -I 'zstd -T0 -19' -cf doom.tar.zst doom emacs
         mv doom.tar.zst ${{ env.BASE_DIR }}/
 
     - name: Release
