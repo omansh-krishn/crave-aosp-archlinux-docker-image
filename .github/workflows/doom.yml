@@ -22,12 +22,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install Deps
+      run: |
+        pacman-key --init
+        pacman-key --populate archlinux
+        pacman -Syu emacs git tar zstd --noconfirm --quiet
+
     - name: sync doom source
       run: |
         echo "BASE_DIR=$(pwd)" >> $GITHUB_ENV
-        pacman-key --init
-        pacman-key --populate archlinux
-        pacman -Sy emacs git tar zstd --noconfirm --quiet
         git clone https://github.com/doomemacs/doomemacs.git ~/.config/emacs
         mv doom ~/.config/
         echo "Synced on: $(date)" > date.txt
