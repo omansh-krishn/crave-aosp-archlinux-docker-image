@@ -26,7 +26,7 @@ jobs:
       run: |
         pacman-key --init
         pacman-key --populate archlinux
-        pacman -Syu emacs-nativecomp git tar zstd --noconfirm --quiet
+        pacman -Syu emacs git tar zstd --noconfirm --quiet
 
     - name: sync doom source
       run: |
