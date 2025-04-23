@@ -3,7 +3,7 @@ FROM archlinux/archlinux:multilib-devel
 COPY assets/sshd_config /tmp/
 RUN set -x && \
   pacman -Sy --noconfirm \
-  && pacman -Syu base-devel binutils byobu cargo chafa clang cmake cpio curl croc extra-cmake-modules ffmpeg ffmpegthumbnailer fd fzf git git-lfs github-cli gnu-netcat gradle guile imagemagick jq less llvm lsb-release meson ninja openmp openssh openssl p7zip poppler popt python pacman-contrib psmisc remake ripgrep repo rsync subversion sudo tmux tree vim neovim wget xxhash yazi zoxide zsh --noconfirm \
+  && pacman -Syu base-devel binutils byobu cargo chafa clang cmake cpio curl croc extra-cmake-modules ffmpeg ffmpegthumbnailer fd fzf gdu git git-lfs github-cli gnu-netcat gradle guile htop imagemagick jq less llvm lsb-release meson ninja nload openmp openssh openssl p7zip poppler popt python pacman-contrib psmisc remake ripgrep repo rsync subversion sudo tmux tree vim neovim wget xxhash yazi zoxide zsh --noconfirm \
   && pacman -Sc --noconfirm \
   && /usr/bin/ssh-keygen -A \
   && mkdir -p /etc/crave \
