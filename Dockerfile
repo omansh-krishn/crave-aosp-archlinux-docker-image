@@ -43,6 +43,10 @@ RUN set -x \
   && git config --global user.email 'omansh@duck.com' \
   && git config --global color.ui true \
   && git config --global core.editor "vim" \
+  && git config --global filter.lfs.clean "git-lfs clean -- %f" \
+  && git config --global filter.lfs.required true \
+  && git config --global filter.lfs.process "git-lfs filter-process" \
+  && git config --global filter.lfs.smudge "git-lfs smudge -- %f" \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
   && sudo pacman -U ./*zst --noconfirm && rm *zst \
   && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm && cd .. && rm -rf paru \
