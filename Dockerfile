@@ -14,7 +14,8 @@ RUN set -x && \
             meson neovim ninja nload openmp openssh openssl \
             poppler popt python pacman-contrib \
             psmisc remake ripgrep repo rsync \
-            subversion sudo tmux tree vim wget xxhash yazi zoxide zsh --noconfirm \
+            subversion sudo tmux tree the_silver_searcher \
+            vim wget xxhash yazi zoxide zsh --noconfirm \
   && pacman -Sc --noconfirm \
   && /usr/bin/ssh-keygen -A \
   && mkdir -p /etc/crave \
