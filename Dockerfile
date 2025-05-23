@@ -61,8 +61,7 @@ RUN set -x \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
   && sudo pacman -U ./*zst --noconfirm \
   && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd .. \
-  && gpg --recv-keys 19882D92DDA4C400C22C0D56CC2AF4472167BE03 \
-  && git clone https://github.com/omansh-krishn/ncurses5-compat-libs && cd ncurses5-compat-libs && makepkg -si --noconfirm && cd .. && rm -rf *zst paru-bin ncurses5-compat-libs \
+  && rm -rf *zst paru-bin \
   && paru -S aosp-devel lineageos-devel --noconfirm
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
