@@ -9,7 +9,7 @@ RUN set -x && \
             cargo chafa clang cmake cpio curl croc \
             extra-cmake-modules \
             ffmpeg ffmpegthumbnailer fd fzf \
-            gdu git git-lfs github-cli gnu-netcat gradle guile \
+            gdu git git-lfs github-cli openbsd-netcat gradle guile \
             htop imagemagick jq less libxml2-legacy llvm lsb-release \
             meson neovim ninja nload openmp openssh openssl \
             poppler popt python pacman-contrib \
