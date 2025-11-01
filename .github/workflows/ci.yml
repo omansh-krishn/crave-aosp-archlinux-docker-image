@@ -8,7 +8,7 @@ on:
       - '.github/workflows/doom.yml'
       - 'doom/**'
   schedule:
-    - cron: '0 0 1,16 * *'
+    - cron: '0 0 10 * *'
   workflow_dispatch:
 
 jobs:
