@@ -30,3 +30,13 @@ jobs:
         docker buildx create --use
         docker buildx inspect --bootstrap
         docker buildx build -t omanshkrishn/crave-archlinux-aosp:latest -t omanshkrishn/crave-archlinux-aosp:$(date +%Y%m%d%H%M%S) --platform linux/amd64 . --push
+    - name: KeepAlive
+      shell: bash
+      run: |
+        git config user.name "Omansh Krishn" && git config user.email "omansh@duck.com"
+        git fetch origin keepalive && git checkout keepalive
+        TIMESTAMP=$(date +%s)
+        echo "${TIMESTAMP}" >> timestamp
+        git add timestamp
+        git commit --signoff -m "KeepAlive: ${TIMESTAMP}"
+        git push origin keepalive
