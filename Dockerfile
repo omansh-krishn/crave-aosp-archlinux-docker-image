@@ -37,7 +37,7 @@ ENV HOME=/home/admin \
     TERM=xterm \
     LANG=en_US.utf8
 WORKDIR /home/admin
-CMD /usr/bin/zsh
+CMD ["/usr/bin/zsh"]
 RUN set -x \
   && sudo chown -R admin:admin /home/admin \
   && mkdir /home/admin/.ssh \
