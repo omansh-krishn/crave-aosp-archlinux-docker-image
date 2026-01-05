@@ -61,8 +61,8 @@ RUN set -x \
   && git config --global filter.lfs.smudge "git-lfs smudge -- %f" \
   && wget https://omansh.vercel.app/api/raw/?path=/omansh/pkgs/lib32-ncurses5-compat-libs/lib32-ncurses5-compat-libs-6.4-1-x86_64.pkg.tar.zst \
   && sudo pacman -U ./*zst --noconfirm \
-  && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd .. \
-  && rm -rf *zst paru-bin \
+  && git clone https://github.com/archlinux/aur -b paru --single-branch paru && cd paru && makepkg -si --noconfirm && cd .. \
+  && rm -rf *zst paru && sudo pacman -R rust --noconfirm \
   && paru -S aosp-devel lineageos-devel --noconfirm
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
