@@ -1,19 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-STORE=$(curl -s https://api.gofile.io/servers | jq -r '.data.servers[0].name')
-APIKEY=$GOFILEIOAPIKEY
-normalup() {
-  MESSAGE=$(curl -F file=@"$1" https://${STORE}.gofile.io/uploadFile | jq)
-}
-tokenup() {
-  MESSAGE=$(curl -F file=@"$1" -H "Authorization: Bearer ${APIKEY}" https://${STORE}.gofile.io/uploadFile | jq)
-}
+TOKEN=""
+FILES=()
 
-if [[ $1 == "-t" ]]; then
-    shift  #shift arg, considering file path is always provided
-    tokenup "$1"
-else
-    normalup "$1"
-fi
-echo $MESSAGE	
-telegram -C "$MESSAGE"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -t|--token)
+      TOKEN="${2:-}"
+      shift 2
+      ;;
+    --)
+      shift
+      while [[ $# -gt 0 ]]; do FILES+=("$1"); shift; done
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      exit 2
+      ;;
+    *)
+      FILES+=("$1")
+      shift
+      ;;
+  esac
+done
+
+for f in "${FILES[@]}"; do
+  if [[ ! -f "$f" ]]; then
+    echo "no: $f" >&2
+    continue
+  fi
+
+  echo "Uploading $f"
+
+  CURL_OPTS=( -sS -F "file=@${f}" "https://upload.gofile.io/uploadfile" )
+  if [[ -n "$TOKEN" ]]; then
+    CURL_OPTS+=( -H "Authorization: Bearer ${TOKEN}" )
+  fi
+
+  curl "${CURL_OPTS[@]}" | jq
+done
+
