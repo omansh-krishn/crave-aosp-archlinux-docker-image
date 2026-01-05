@@ -14,6 +14,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
 
     steps:
     - name: Checkout code
@@ -28,11 +31,18 @@ jobs:
         username: omanshkrishn
         password: ${{ secrets.DOCKERPASSWORD }}
 
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Build and push Docker image
       run: |
         docker buildx create --use
         docker buildx inspect --bootstrap
-        docker buildx build -t omanshkrishn/crave-archlinux-aosp:latest -t omanshkrishn/crave-archlinux-aosp:$(date +%Y%m%d%H%M%S) --platform linux/amd64 . --push
+        docker buildx build -t omanshkrishn/crave-archlinux-aosp:latest -t omanshkrishn/crave-archlinux-aosp:$(date +%Y%m%d%H%M%S) -t ghcr.io/${{ github.repository_owner }}/crave-archlinux-aosp:latest --platform linux/amd64 . --push
     - name: KeepAlive
       shell: bash
       run: |
