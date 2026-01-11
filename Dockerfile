@@ -72,7 +72,8 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
   && git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 RUN byobu-enable && touch /home/admin/.config/byobu/.welcome-displayed
 RUN sudo curl -o /usr/bin/resync https://raw.githubusercontent.com/accupara/docker-images/master/aosp/common/resync.sh \
- && sudo chmod +x /usr/bin/resync
+ && sudo chmod +x /usr/bin/resync \
+ && mkdir -p /opt/crave/ && ln -sf /usr/bin/resync /opt/crave/resync.sh
 
 COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
