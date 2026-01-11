@@ -32,7 +32,7 @@ for f in "${FILES[@]}"; do
 
   echo "Uploading $f"
 
-  CURL_OPTS=( -sS -F "file=@${f}" "https://upload.gofile.io/uploadfile" )
+  CURL_OPTS=( -F "file=@${f}" "https://upload.gofile.io/uploadfile" )
   if [[ -n "$TOKEN" ]]; then
     CURL_OPTS+=( -H "Authorization: Bearer ${TOKEN}" )
   fi
