@@ -73,7 +73,7 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
 RUN byobu-enable && touch /home/admin/.config/byobu/.welcome-displayed
 RUN sudo curl -o /usr/bin/resync https://raw.githubusercontent.com/accupara/docker-images/master/aosp/common/resync.sh \
  && sudo chmod +x /usr/bin/resync \
- && mkdir -p /opt/crave/ && ln -sf /usr/bin/resync /opt/crave/resync.sh
+ && sudo mkdir -p /opt/crave/ && sudo ln -sf /usr/bin/resync /opt/crave/resync.sh
 
 COPY assets/zshrc /home/admin/.zshrc
 COPY assets/p10k.zsh /home/admin/.p10k.zsh
