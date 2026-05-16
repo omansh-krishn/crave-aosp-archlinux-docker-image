@@ -63,7 +63,7 @@ RUN set -x \
   && sudo pacman -U ./*zst --noconfirm \
   && git clone https://github.com/archlinux/aur -b paru --single-branch paru && cd paru && makepkg -si --noconfirm && cd .. \
   && rm -rf *zst paru && sudo pacman -R rust --noconfirm \
-  && paru -S aosp-devel lineageos-devel byobu --noconfirm
+  && paru -S aosp-devel lineageos-devel byobu wush-bin --noconfirm
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
   && $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/install \
